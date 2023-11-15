@@ -4,6 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import HomeScreen from "./views/HomeScreen";
 import DetailsScreen from "./views/DetailsScreen";
+import PokemonsList from "./views/PokemonsList";
+
 
 const MainNavigator = createStackNavigator();
 
@@ -23,6 +25,11 @@ function MyStack() {
         }
         }/>
     
+    <MainNavigator.Screen name="Lista de pokemones" component={PokemonsList} 
+         options={{
+            headerShown: false,
+        }
+        }/>
       </MainNavigator.Navigator>
     </NavigationContainer>
   );

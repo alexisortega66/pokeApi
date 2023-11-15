@@ -1,6 +1,4 @@
 // HomeScreen.js
-
-// Dene tener Contenedotres de categorias y un buscador
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Card, Text, Image } from 'react-native-elements';

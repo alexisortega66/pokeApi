@@ -1,4 +1,4 @@
-// HomeScreen.js
+// Debe aparecerte todos los pokemones de esa categoria
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Card, Text, Image } from 'react-native-elements';

@@ -1,18 +1,28 @@
-// Debe aparecerte todos los pokemones de esa categoria
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { Card, Text, Image } from 'react-native-elements';
 import axios from 'axios';
 
-const HomeScreen = ({ navigation }) => {
+const PokemonsList = ({ navigation, route }) => {
   const [pokemonList, setPokemonList] = useState([]);
+  const type = route.params?.type;
 
   useEffect(() => {
-    axios.get('https://pokeapi.co/api/v2/pokemon?limit=20')
-      .then(response => {
-        setPokemonList(response.data.results);
-      });
-  }, []);
+    // Lógica para obtener la lista de Pokémon según la categoría (type)
+    fetchPokemonListByType();
+  }, [type]);
+
+  const fetchPokemonListByType = async () => {
+    try {
+      const response = await axios.get(`https://pokeapi.co/api/v2/type/${type}`);
+      const pokemonUrls = response.data.pokemon.map(pokemon => pokemon.pokemon.url);
+      const pokemonDetails = await Promise.all(pokemonUrls.map(url => axios.get(url)));
+      const pokemonListByType = pokemonDetails.map(response => response.data);
+      setPokemonList(pokemonListByType);
+    } catch (error) {
+      console.error('Error fetching Pokemon list by type:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -62,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default PokemonsList;

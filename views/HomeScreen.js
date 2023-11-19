@@ -1,39 +1,38 @@
-// HomeScreen.js
-
-// Dene tener Contenedotres de categorias y un buscador
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { Card, Text, Image } from 'react-native-elements';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Card } from 'react-native-elements';
 import axios from 'axios';
 
 const HomeScreen = ({ navigation }) => {
-  const [pokemonList, setPokemonList] = useState([]);
+  const [types, setTypes] = useState([]);
 
   useEffect(() => {
-    axios.get('https://pokeapi.co/api/v2/pokemon?limit=20')
+    axios.get('https://pokeapi.co/api/v2/type')
       .then(response => {
-        setPokemonList(response.data.results);
+        setTypes(response.data.results);
+      })
+      .catch(error => {
+        console.error('Error fetching Pokemon types:', error);
       });
   }, []);
+
+  const renderType = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('PokemonsList', { type: item.name })}
+    >
+      <Card containerStyle={styles.card}>
+        {/* Puedes utilizar un ícono relacionado con el tipo si lo deseas */}
+        <Text style={styles.typeText}>{item.name}</Text>
+      </Card>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={pokemonList}
+        data={types}
         keyExtractor={(item) => item.name}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DetailsScreen', { name: item.name })}
-          >
-            <Card containerStyle={styles.card}>
-              <Image
-                source={{ uri: `https://img.pokemondb.net/artwork/${item.name}.jpg` }}
-                style={styles.image}
-              />
-              <Text style={styles.text}>{item.name}</Text>
-            </Card>
-          </TouchableOpacity>
-        )}
+        renderItem={renderType}
       />
     </View>
   );
@@ -42,24 +41,15 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#f5fcff',
+    padding: 10,
   },
   card: {
-    width: 150,
-    height: 250,
-    justifyContent: 'center',
+    margin: 10,
     alignItems: 'center',
   },
-  image: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-  },
-  text: {
+  typeText: {
     fontSize: 18,
-    textAlign: 'center',
     marginTop: 10,
   },
 });

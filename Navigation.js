@@ -25,7 +25,7 @@ function MyStack() {
         }
         }/>
     
-    <MainNavigator.Screen name="Lista de pokemones" component={PokemonsList} 
+    <MainNavigator.Screen name="PokemonsList" component={PokemonsList} 
          options={{
             headerShown: false,
         }

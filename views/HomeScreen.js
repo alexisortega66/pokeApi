@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { Card } from 'react-native-elements';
+import React from 'react';
+import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Card, Text } from 'react-native-elements';
 import axios from 'axios';
 
 const HomeScreen = ({ navigation }) => {
-  const [types, setTypes] = useState([]);
+  const [types, setTypes] = React.useState([]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     axios.get('https://pokeapi.co/api/v2/type')
       .then(response => {
         setTypes(response.data.results);
@@ -21,7 +21,6 @@ const HomeScreen = ({ navigation }) => {
       onPress={() => navigation.navigate('PokemonsList', { type: item.name })}
     >
       <Card containerStyle={styles.card}>
-        {/* Puedes utilizar un ícono relacionado con el tipo si lo deseas */}
         <Text style={styles.typeText}>{item.name}</Text>
       </Card>
     </TouchableOpacity>
@@ -29,6 +28,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Types</Text>
       <FlatList
         data={types}
         keyExtractor={(item) => item.name}
@@ -43,9 +43,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5fcff',
     padding: 10,
+    paddingTop: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
   },
   card: {
     margin: 10,
+    marginBottom: 20,
     alignItems: 'center',
   },
   typeText: {

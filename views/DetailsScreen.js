@@ -1,4 +1,3 @@
-// DetailsScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Card, Image } from 'react-native-elements';
@@ -30,13 +29,27 @@ const DetailsScreen = ({ route, navigation }) => {
       <View style={styles.cardContainer}>
         {pokemonDetails ? (
           <Card containerStyle={styles.card}>
+            <Text style={styles.title}>{`#${pokemonDetails.id} ${pokemonDetails.name}`}</Text>
             <Image
               source={{ uri: `https://img.pokemondb.net/artwork/${pokemonName}.jpg` }}
               style={styles.image}
             />
-            <Text style={styles.text}>Name: {pokemonDetails.name}</Text>
-            <Text style={styles.text}>Height: {pokemonDetails.height}</Text>
-            <Text style={styles.text}>Weight: {pokemonDetails.weight}</Text>
+            <Text style={styles.subtitle}>Height:</Text>
+            <Text style={styles.text}>- {pokemonDetails.height}</Text>
+            <Text style={styles.subtitle}>Weight:</Text>
+            <Text style={styles.text}>- {pokemonDetails.weight}</Text>
+            {/* Mostrar todos los demás datos que desees */}
+            {/* Ejemplo: */}
+            <Text style={styles.subtitle}>Base Experience:</Text>
+            <Text style={styles.text}>- {pokemonDetails.base_experience}</Text>
+            <Text style={styles.subtitle}>Abilities:</Text>
+            {pokemonDetails.abilities.map((ability, index) => (
+              <Text key={index} style={styles.text}>- {ability.ability.name}</Text>
+            ))}
+            <Text style={styles.subtitle}>Types:</Text>
+            {pokemonDetails.types.map((type, index) => (
+              <Text key={index} style={styles.text}>- {type.type.name}</Text>
+            ))}
           </Card>
         ) : (
           <Text style={styles.text}>Loading...</Text>
@@ -79,9 +92,20 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'contain',
   },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
   text: {
     fontSize: 18,
-    marginTop: 10,
+    marginTop: 5,
+    textAlign: 'center',
   },
 });
 

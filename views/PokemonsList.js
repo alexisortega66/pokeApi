@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { Card, Text, Image } from 'react-native-elements';
 import axios from 'axios';
 
 const PokemonsList = ({ navigation, route }) => {
   const [pokemonList, setPokemonList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const type = route.params?.type;
 
   useEffect(() => {
-    // Lógica para obtener la lista de Pokémon según la categoría (type)
     fetchPokemonListByType();
   }, [type]);
 
@@ -21,28 +21,43 @@ const PokemonsList = ({ navigation, route }) => {
       setPokemonList(pokemonListByType);
     } catch (error) {
       console.error('Error fetching Pokemon list by type:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={pokemonList}
-        keyExtractor={(item) => item.name}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DetailsScreen', { name: item.name })}
-          >
-            <Card containerStyle={styles.card}>
-              <Image
-                source={{ uri: `https://img.pokemondb.net/artwork/${item.name}.jpg` }}
-                style={styles.image}
-              />
-              <Text style={styles.text}>{item.name}</Text>
-            </Card>
-          </TouchableOpacity>
-        )}
-      />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('HomeScreen')}
+        style={styles.goBackButton}
+      >
+        <Text style={styles.buttonText}>Go Back</Text>
+      </TouchableOpacity>
+      <Text style={styles.header}>Pokemon List</Text>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#3498db" />
+      ) : (
+        <FlatList
+          data={pokemonList}
+          keyExtractor={(item) => item.name}
+          numColumns={2}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DetailsScreen', { name: item.name })}
+            >
+              <Card containerStyle={styles.card}>
+                <Text style={styles.title}>{`#${item.id} `}</Text>
+                <Image
+                  source={{ uri: `https://img.pokemondb.net/artwork/${item.name}.jpg` }}
+                  style={styles.image}
+                />
+                <Text style={styles.title}>{` ${item.name}`}</Text>
+              </Card>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -54,11 +69,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f5fcff',
   },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  header: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
   card: {
     width: 150,
     height: 250,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 10,
   },
   image: {
     width: 120,
@@ -69,6 +96,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     marginTop: 10,
+  },
+  goBackButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    backgroundColor: '#3498db',
+    padding: 10,
+    borderRadius: 5,
+    zIndex: 1,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
 

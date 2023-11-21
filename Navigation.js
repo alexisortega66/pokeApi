@@ -9,13 +9,14 @@ import HomeScreen from "./views/HomeScreen";
 import DetailsScreen from "./views/DetailsScreen";
 import PokemonsList from "./views/PokemonsList";
 import SearchScreen from "./views/SearchScreen";
+import InicioScreen from "./views/InicioScreen";
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 
 const HomeStackScreen = () => (
-  <HomeStack.Navigator>
+  <HomeStack.Navigator initialRouteName="InicioScreen">
     <HomeStack.Screen
       name="HomeScreen"
       component={HomeScreen}
@@ -29,6 +30,11 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="PokemonsList"
       component={PokemonsList}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="InicioScreen"
+      component={InicioScreen}
       options={{ headerShown: false }}
     />
   </HomeStack.Navigator>
